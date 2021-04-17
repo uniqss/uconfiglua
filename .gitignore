@@ -1,1 +1,9 @@
 /build
+/.vs
+/bin
+!/bin/script/*.lua
+!/bin/data/*.csv
+/build/*
+/.vscode/*
+
+
