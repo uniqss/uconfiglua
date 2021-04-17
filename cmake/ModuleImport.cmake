@@ -171,23 +171,22 @@ macro(DllImport ModuleName ModulePath ExcludeFileListRegex)
     ENDIF()
 endmacro(DllImport)
 
-macro(DllImport3 ModuleName ModulePath ExtraIncludeDirList ExcludeFileListRegex CompileFlagsList)
+macro(DllImport3 ModuleName ModulePath ExtraDirList ExcludeFileListRegex CompileFlagsList)
     MESSAGE(STATUS "DllImport3 ${ModuleName} ${ModulePath} ${ExcludeFileListRegex} ${CompileFlagsList}")
-    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath})
 
-    FOREACH(include ${ExtraIncludeDirList})
-        IF (IS_DIRECTORY ${include})
-            INCLUDE_DIRECTORIES(${include})
+    FOREACH(__dir ${ExtraDirList})
+        IF (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${__dir})
+            INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/${__dir})
         ENDIF()
-    ENDFOREACH(include)
+    ENDFOREACH(__dir)
 
-    LIST(APPEND INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath} ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/include 
+    LIST(APPEND OTHER_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath} ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/include 
     ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/inc ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/headers)
-    FOREACH(include ${INCLUDES})
-        IF (IS_DIRECTORY ${include})
-            INCLUDE_DIRECTORIES(${include})
+    FOREACH(__include ${OTHER_INCLUDES})
+        IF (IS_DIRECTORY ${__include})
+            INCLUDE_DIRECTORIES(${__include})
         ENDIF()
-    ENDFOREACH(include)
+    ENDFOREACH(__include)
     
     FILE(GLOB DLL_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp
@@ -198,6 +197,26 @@ macro(DllImport3 ModuleName ModulePath ExtraIncludeDirList ExcludeFileListRegex 
         ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/*.c
         ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/*.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/*.h
+
+        FOREACH(__dir ${ExtraDirList})
+            IF (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${__dir})
+                MESSAGE(STATUS "fuck fuck fuck ${CMAKE_CURRENT_SOURCE_DIR}/${__dir}")
+                ${CMAKE_CURRENT_SOURCE_DIR}/${__dir}/*.cpp
+                ${CMAKE_CURRENT_SOURCE_DIR}/${__dir}/*.cc
+                ${CMAKE_CURRENT_SOURCE_DIR}/${__dir}/*.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/${__dir}/*.hpp
+                ${CMAKE_CURRENT_SOURCE_DIR}/${__dir}/*.h
+            ENDIF()
+        ENDFOREACH(__dir)
+        
+        IF (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/src)
+            ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/src/*.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/src/*.cc
+            ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/src/*.c
+            ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/src/*.hpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/src/*.h
+        ENDIF()
+
         IF (IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/sources)
             ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/sources/*.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/${ModulePath}/sources/*.cc

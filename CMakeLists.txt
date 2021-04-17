@@ -21,9 +21,9 @@ LibImport("uconfiglib" "src/uconfiglib")
 # LIST(APPEND ExcludeFileListRegex "lua.c$" "luac.c$" "wmain.c$")
 # DllImport3("lua53" "src/lua53" "" "${ExcludeFileListRegex}" "-DLUA_BUILD_AS_DLL -DLUA_CORE")
 
-LIST(APPEND ExtraIncludeDirList "src/OpenXLSX/library/external/zippy" "src/OpenXLSX/library/external/pugixml" 
+LIST(APPEND ExtraDirList "src/OpenXLSX/library/external/zippy" "src/OpenXLSX/library/external/pugixml" 
 "src/OpenXLSX/library/external/nowide" "src/OpenXLSX/library/external")
-DllImport3("OpenXLSX" "src/OpenXLSX/library" "${ExtraIncludeDirList}" "" "")
+DllImport3("OpenXLSX" "src/OpenXLSX/library" "${ExtraDirList}" "" "")
 
 ExeImport("test" "uconfiglib;lua53;OpenXLSX")
 
